@@ -1,6 +1,7 @@
 import logging
 import random
 import time
+from tkinter import HORIZONTAL
 from breezypythongui import EasyFrame, EasyCanvas
 
 logger = logging.getLogger(__name__)
@@ -36,15 +37,11 @@ class CountdownGui(EasyFrame):
                                   outline="white",
                                   fill="black")
 
-        for x in range(3):
-            self.canvas.drawText('0', 75 + 150 * x, 100, font=("Courier", 150, 'bold'),
-                                 tag=f'bignum-{x}', fill='lightgreen')
-
         self.__show_bignum('---')
         self.addCanvas(canvas=RedButton(self, on_click=self.create_random_bignum),
                        row=1, column=6)
 
-        nums = []
+        self.__nums = []
         for x in range(6):
             canvas = self.addCanvas(row=1, column=x,
                                     width=70,
@@ -52,8 +49,20 @@ class CountdownGui(EasyFrame):
             canvas.drawRectangle(0, 0, 69, 49,
                                  outline="black",
                                  fill="white")
-            canvas.drawText(' ', 32, 28, font=("Arial", 36, 'bold'), tag=f'num-{x}')
-            nums.append(canvas)
+            canvas.drawText('-', 32, 28, font=("Arial", 36, 'bold'), tag=f'num-{x}')
+            self.__nums.append(canvas)
+
+        self.group = self.addRadiobuttonGroup(row=2, column=0, columnspan=6, rowspan=1,
+                                              orient=HORIZONTAL)
+        self.group.addRadiobutton('4 Big')
+        self.group.addRadiobutton('3 Big')
+        default = self.group.addRadiobutton('2 Big')
+        self.group.addRadiobutton('1 Big')
+        self.group.addRadiobutton('All small')
+
+        self.group.setSelectedButton(default)
+
+        self.addButton("Play", row=3, column=0, columnspan=6, rowspan=2, command=self.play)
 
     def __show_bignum(self, num):
         """This method draws a Big Number on the canvas. It splits
@@ -89,6 +98,26 @@ class CountdownGui(EasyFrame):
 
             # Make sure the display updates
             self.update()
+
+    def get_random_selection(self, big):
+        big_numbers = random.sample(self.BIG_NUMBERS, big)
+        small_numbers = random.sample(self.SMALL_NUMBERS, 6 - big)
+        return big_numbers + small_numbers
+
+    def play(self):
+        self.__show_bignum('---')
+
+        value = self.group.getSelectedButton()['value'][0]
+        if value == 'A':
+            big = 0
+        else:
+            big = int(value)
+
+        sample = self.get_random_selection(big)
+        for x in range(6):
+            canvas = self.__nums[x]
+            canvas.delete(f'num-{x}')
+            canvas.drawText(str(sample[x]), 32, 28, font=("Arial", 36, 'bold'), tag=f'num-{x}')
 
 
 class RedButton(EasyCanvas):
