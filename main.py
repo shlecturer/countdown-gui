@@ -27,7 +27,7 @@ class CountdownGui(EasyFrame):
 
         self.create_random_bignum(guess=101)
         self.addCanvas(canvas=RedButton(self, on_click=self.create_random_bignum),
-                       row=0, column=6, rowspan=1)
+                       row=1, column=6)
 
         nums = []
         for x in range(6):
@@ -56,16 +56,16 @@ class CountdownGui(EasyFrame):
 
 class RedButton(EasyCanvas):
     def __init__(self, parent, on_click=None):
-        EasyCanvas.__init__(self, parent, width=32)
+        EasyCanvas.__init__(self, parent, width=50, height=50)
 
-        self.drawOval(4, 88, 28, 112, fill='red')
+        self.drawOval(12, 12, 38, 38, fill='yellow')
 
         self.__on_click = on_click
 
     def mouseReleased(self, event):
         if self.__on_click:
             x, y = event.x, event.y
-            if 4 <= x <= 28 and 88 <= y <= 112:
+            if 12 <= x <= 38 and 12 <= y <= 38:
                 logger.info('Click event. Calling handler.')
                 self.__on_click()
 
