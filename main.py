@@ -1,5 +1,6 @@
 import logging
 import random
+import time
 from breezypythongui import EasyFrame, EasyCanvas
 
 logger = logging.getLogger(__name__)
@@ -40,18 +41,37 @@ class CountdownGui(EasyFrame):
             canvas.drawText(' ', 32, 28, font=("Arial", 36, 'bold'), tag=f'num-{x}')
             nums.append(canvas)
 
-    def create_random_bignum(self, guess=None):
-        if not guess:
-            guess = random.randint(101, 999)
-
-        n = 100
+    def __show_bignum(self, num):
+        """This method draws a Big Number on the canvas. It splits
+        the number into three digits. Each is shown separately on
+        the canvas.
+        """
+        fill = 'lightgreen'
+        font = ("Courier", 150, 'bold')
+        num = str(num)
         for x in range(3):
             self.canvas.delete(f'bignum-{x}')
-            m = guess // n
-            guess -= m * n
-            n //= 10
-            self.canvas.drawText(str(m), 75 + 150 * x, 100, font=("Courier", 150, 'bold'),
-                                 tag=f'bignum-{x}', fill='lightgreen')
+            self.canvas.drawText(num[x], 75 + 150 * x, 100, font=font,
+                                 tag=f'bignum-{x}', fill=fill)
+
+    def create_random_bignum(self, guess=None):
+        """Create a random number and show it as a Big Number.
+        If a guess is provided, it is simply shown. If no guess
+        is provided, the program will randomly select one,
+        while showing the selection process.
+        """
+        if guess:
+            self.__show_bignum(guess)
+        else:
+            timeout = 0.015
+            for x in range(25):
+                guess = random.randint(101, 999)
+                self.__show_bignum(guess)
+                if x % 5 == 1:
+                    timeout += 0.025
+
+                time.sleep(timeout)
+                self.update()
 
 
 class RedButton(EasyCanvas):
