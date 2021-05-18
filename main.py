@@ -129,7 +129,7 @@ class CountdownGui(EasyFrame):
         else:
             big = int(value)  # The number of "big numbers"
 
-        # Get the randoms selection and update the display
+        # Get the random selection and update the display
         sample = self.get_random_selection(big)
         for x in range(6):
             canvas = self.__nums[x]
