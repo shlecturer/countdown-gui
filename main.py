@@ -23,8 +23,10 @@ class CountdownGui(EasyFrame):
 
     By pressing the yellow button, a new number can be selected.
     """
-    SMALL_NUMBERS = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10]
-    BIG_NUMBERS = [25, 50, 75, 100]
+    NUMBERS = {
+        'small': [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10],
+        'big': [25, 50, 75, 100],
+    }
 
     def __init__(self):
         EasyFrame.__init__(self, title="Countdown")
@@ -93,15 +95,17 @@ class CountdownGui(EasyFrame):
                 timeout += 0.025
 
             # Get a new random number
-            guess = random.randint(101, 999)
+            guess = random.randint(100, 999)
             self.__show_bignum(str(guess))
 
             # Make sure the display updates
             self.update()
 
-    def get_random_selection(self, big):
-        big_numbers = random.sample(self.BIG_NUMBERS, big)
-        small_numbers = random.sample(self.SMALL_NUMBERS, 6 - big)
+    def get_random_selection(self, big, total=6):
+        assert total - big >= 0
+
+        big_numbers = random.sample(self.NUMBERS['big'], big)
+        small_numbers = random.sample(self.NUMBERS['small'], total - big)
         return big_numbers + small_numbers
 
     def play(self):
