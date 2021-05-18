@@ -102,6 +102,12 @@ class CountdownGui(EasyFrame):
             self.update()
 
     def get_random_selection(self, big, total=6):
+        """This method gets a random selection of numbers from the
+        available numbers. The number of "big numbers" must be
+        provided as the argument {big}. The parameter {total} is
+        optional and set 6 by default (the actual number for the
+        official Countdown game.
+        """
         assert total - big >= 0
 
         big_numbers = random.sample(self.NUMBERS['big'], big)
@@ -109,14 +115,21 @@ class CountdownGui(EasyFrame):
         return big_numbers + small_numbers
 
     def play(self):
+        """This method starts a round. It sets the "big number" in the display
+        to --- to indicate a new round has started. It selects a number of
+        random numbers based on the selected RadioButton. The player can
+        choose between 0 and 4 big numbers. The rest will be small numbers.
+        """
         self.__show_bignum('---')
 
+        # Get the selected value from the Button Group
         value = self.group.getSelectedButton()['value'][0]
         if value == 'A':
-            big = 0
+            big = 0  # All small
         else:
-            big = int(value)
+            big = int(value)  # The number of "big numbers"
 
+        # Get the randoms selection and update the display
         sample = self.get_random_selection(big)
         for x in range(6):
             canvas = self.__nums[x]
@@ -128,11 +141,14 @@ class RedButton(EasyCanvas):
     def __init__(self, parent, on_click=None):
         EasyCanvas.__init__(self, parent, width=50, height=50)
 
-        self.drawOval(12, 12, 38, 38, fill='yellow')
+        self.drawOval(12, 12, 38, 38, fill='yellow')  # circle
 
         self.__on_click = on_click
 
     def mouseReleased(self, event):
+        """This method is triggered when the mouse button is released.
+        We count that as a click event and call the handler accordingly..
+        """
         if self.__on_click:
             x, y = event.x, event.y
             if 12 <= x <= 38 and 12 <= y <= 38:
