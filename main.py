@@ -29,9 +29,6 @@ class CountdownGui(EasyFrame):
                                         height=200,
                                         background='black')
 
-        # Number of big numbers (from radio button group)
-        self.__n_big = 2
-
         # Target number
         self.__show_target_number('---')
 
@@ -56,23 +53,18 @@ class CountdownGui(EasyFrame):
         self.__group = self.addRadiobuttonGroup(row=2, column=0,
                                                 columnspan=6, rowspan=1,
                                                 orient=HORIZONTAL)
-        self.__group.addRadiobutton(text='4 Big', command=lambda: self.__set_big_num(4))
-        self.__group.addRadiobutton(text='3 Big', command=lambda: self.__set_big_num(3))
+        self.__group.addRadiobutton(text='4 Big')
+        self.__group.addRadiobutton(text='3 Big')
         # default button
-        default = self.__group.addRadiobutton(text='2 Big', command=lambda: self.__set_big_num(2))
-        self.__group.addRadiobutton(text='1 Big', command=lambda: self.__set_big_num(1))
-        self.__group.addRadiobutton(text='All small', command=lambda: self.__set_big_num(0))
+        default = self.__group.addRadiobutton(text='2 Big')
+        self.__group.addRadiobutton(text='1 Big')
+        self.__group.addRadiobutton(text='All small')
         self.__group.setSelectedButton(default)
 
         # Start a round of Countdown!
         self.addButton("Let's play Countdown!", row=3, column=0,
                        columnspan=6, rowspan=3,
                        command=self.__play)
-
-    def __set_big_num(self, num):
-        """Set the number of big numbers from the radio group..
-        """
-        self.__n_big = num
 
     def __show_target_number(self, num):
         """This method draws a Big Number on the canvas. It splits
@@ -116,8 +108,12 @@ class CountdownGui(EasyFrame):
         """
         self.__show_target_number('---')
 
+        # The value is the same as the label, so use that
+        s_big = self.__group.getSelectedButton()['value'][0]
+        n_big = 0 if s_big == 'A' else int(s_big)
+
         # Get the randoms selection and update the display
-        sample = Numbers.get_random_selection(self.__n_big)
+        sample = Numbers.get_random_selection(n_big)
         for x in range(6):
             canvas = self.__nums[x]
             canvas.delete(f'num-{x}')
