@@ -67,8 +67,6 @@ class CountdownGui(EasyFrame):
         # Start a round of Countdown!
         self.addButton("Let's play Countdown!", row=3, column=0,
                        columnspan=6, rowspan=3,
-                       # fgcolour='white',
-                       # bgcolour='blue',
                        command=self.__play)
 
     def __set_big_num(self, num):
