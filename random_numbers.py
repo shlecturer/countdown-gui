@@ -1,7 +1,7 @@
 import random
 
 
-class Numbers:
+class RandomNumbers:
     NUMBERS = {
         'small': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
         'big': [25, 50, 75, 100],
@@ -23,6 +23,6 @@ class Numbers:
         official Countdown game).
         """
         assert total - big >= 0
-        big_numbers = random.sample(Numbers.NUMBERS['big'], big)
-        small_numbers = random.sample(Numbers.NUMBERS['small'], total - big)
+        big_numbers = random.sample(RandomNumbers.NUMBERS['big'], big)
+        small_numbers = random.sample(RandomNumbers.NUMBERS['small'], total - big)
         return big_numbers + small_numbers
